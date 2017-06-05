@@ -126,9 +126,13 @@ module.exports.loop = function() {
             for (let indexCreep in Game.creeps) {
                 let creep = Game.creeps[indexCreep];
 
-                if (creep.memory.job != 'gather') {
-                    creep.memory.job = 'gather';
-                    creep.memory.action = 'harvest';
+                if (creep.memory.kin == 'harvester' || kin_counter[
+                        'harvester'] < room.memory.config.creeps.harvester
+                    .max / 2.0) {
+                    if (creep.memory.job != 'gather') {
+                        creep.memory.job = 'gather';
+                        creep.memory.action = 'harvest';
+                    }
                 }
             }
         }

@@ -7,9 +7,16 @@ function systemBuild(room) {
             while (active_sites < max_builders) {
                 let new_site = queue.shift();
                 if (new_site) {
-                    room.createConstructionSite(new_site.x, new_site.y,
+                    let result = room.createConstructionSite(new_site.x,
+                        new_site.y,
                         new_site.structureType);
-                    active_sites += 1;
+                    if (result == OK) {
+                        active_sites += 1;
+                    } else if (ERR_RCL_NOT_ENOUGH) {
+                        room.memory.config.queue.push(new_site);
+                        //if rcl isnt enough, push it onto the end of the queue
+                        //this allows for keeping sites that cant be placed yet cycled
+                    }
                 } else {
                     break; //no more sites to place :(
                 }

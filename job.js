@@ -54,7 +54,9 @@ var transfer = function(creep, target, target_requester) {
         creep.moveTo(target);
     } else if (creep.carry.energy == creep.carryCapacity && creep.memory.stationary >
         2) {
-        creep.needTarget(target_requester, 'energyStorage');
+        creep.memory.job = 'construct';
+        creep.nextAction();
+        creep.needTarget(target_requester, FIND_CONSTRUCTION_SITES);
     } else if (result == ERR_INVALID_TARGET) {
         console.log(
             `Creep ${creep.name} had invalid target ${creep.memory.target} for action Transfer.`
