@@ -135,27 +135,21 @@ var config2 = function(room) {
         });
         // console.log('c15');
         harvester_max += spaces.length;
-        // console.log('c16');
-        let middle_space = spaces[0];
-        // console.log('c17');
-        if (middle_space) {
-            config.queue.push({
-                x: middle_space.x,
-                y: middle_space.y,
-                structureType: STRUCTURE_CONTAINER
-            });
-        }
 
         //add 5 extensions to the build queue
         let max_extensions = CONTROLLER_STRUCTURES.extension[room.controller
             .level]; //const with structure maxes by rcl
         _.forEach(spaces, (tile) => {
-            config.queue.push({
-                x: tile.x,
-                y: tile.y,
-                structureType: STRUCTURE_EXTENSION
-            });
-            max_extensions -= 1;
+            let occupants = room.lookAt(tile.x, tile.y)
+                .map( (obj) => { return obj.type === 'structure'} );
+            if(!occupants) {
+                config.queue.push({
+                    x: tile.x,
+                    y: tile.y,
+                    structureType: STRUCTURE_EXTENSION
+                });
+                max_extensions -= 1;
+            }
             if (max_extensions == 0) {
                 return false;
             }
