@@ -1,3 +1,95 @@
+var cnst = require('targetPoolConstants');
+
+function makeFinder(temp_id, temp_interval, temp_offset, temp_func) {
+    return {
+        id: temp_id,
+        interval: temp_interval,
+        offset: temp_offset,
+        func: temp_func
+    };
+}
+
+var finderEnergySource = makeFinder(cnst.energySource, cnst.energySourceInterval,
+    0,
+    function(room, pool) {
+        pool[cnst.energySource] = toIDs(room.find(FIND_SOURCES));
+    }
+);
+
+var finderEnergySupply = makeFinder(cnst.energySupply, cnst.energySupplyInterval,
+    0,
+    function(room, pool) {
+        var energySupply = [];
+
+        var sources = room.find(FIND_SOURCES)
+        for (var indexSource in sources) {
+            var source = sources[indexSource];
+
+            var structures = room.lookForAtArea(LOOK_STRUCTURES, source.pos
+                .y - 1, source.pos.x - 1, source.pos.y + 1, source.pos.x +
+                1, true);
+
+            for (var indexStructures in structures) {
+                var structure = structures[indexStructures];
+
+                if (structure.structureType == STRUCTURE_CONTAINER) {
+                    energySupply.push(structure.id);
+                }
+            }
+        }
+
+        pool[cnst.energySupply] = energySupply;
+    }
+);
+
+var finderEnergyStorage = makeFinder(cnst.energyStorage, cnst.energyStorageInterval,
+    1,
+    function(room, pool) {
+        if (pool[cnst.energySupply]) {
+            var structures = room.find(
+                FIND_STRUCTURES, {
+                    filter: (struct) => {
+                        return struct.structureType ==
+                            STRUCTURE_CONTAINER;
+                    }
+                }
+            );
+
+            if (structures.length == 0) {
+                structures.push(
+                    room.find(
+                        FIND_STRUCTURES, {
+                            filter: (struct) => {
+                                return struct.structureType ==
+                                    STRUCTURE_SPAWN || struct.structureType ==
+                                    STRUCTURE_EXTENSION;
+                            }
+                        }
+                    )[0]
+                );
+            }
+
+            var structureStorage = toIDs(structures);
+
+            for (var indexStructureStorage in structuresStorage) {
+                var structureStorage = structures[indexStructureStorage];
+
+                for (var indexStructureSupply in pool[cnst.energySupply]) {
+                    var structureSupply = pool[cnst.energySupply][
+                        indexStructureSupply
+                    ];
+
+                    if (structureStorage == structureSupply) {
+                        delete structureStorage[indexStructureStorage];
+                    }
+                }
+            }
+
+            pool[cnst.energyStorage] = structureStorage;
+        }
+    }
+);
+
 var stateResources = 0;
 var stateCreeps = 1;
 var stateStructures = 2;
