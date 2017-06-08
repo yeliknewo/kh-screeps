@@ -1,5 +1,5 @@
-var config1 = require('configs/config1');
-var config2 = require('configs/config2');
+var config1 = require('config1');
+var config2 = require('config2');
 
 var level_to_config_generator = {
     0: {},
