@@ -1,4 +1,4 @@
-var util = require('../util')
+var util = require('util')
 var buildRoad = util.buildRoad;
 
 //generates config for a lvl 1 room
