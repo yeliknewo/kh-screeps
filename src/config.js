@@ -144,11 +144,11 @@ var config2 = function(room) {
         harvester_max += placeContainersAtSources(source, room,
             config);
 
-        buildRoad(config, room, spawn.pos, source.pos);
+        // buildRoad(config, room, spawn.pos, source.pos);
         // console.log('c18');
     });
 
-    buildRoad(config, room, spawn.pos, room.controller.pos);
+    // buildRoad(config, room, spawn.pos, room.controller.pos);
 
     harvester_max = 6;
 
