@@ -143,7 +143,7 @@ var finderStructure = function(room, pool) {
         filterStucturesToPool(pool, structures, filters[indexFilter]);
     }
 
-    pool[STRUCTURE_CONTROLLER] = [room.controller.id];
+    pool[cnst.controller] = [room.controller.id];
 };
 
 var finderResource = function(room, pool) {
