@@ -21,7 +21,7 @@ var finderEnergySupply = makeFinder(cnst.energySupply, cnst.energySupplyInterval
     function(room, pool) {
         var energySupply = [];
 
-        var sources = room.find(FIND_SOURCES)
+        var sources = room.find(FIND_SOURCES);
         for (var indexSource in sources) {
             var source = sources[indexSource];
 
