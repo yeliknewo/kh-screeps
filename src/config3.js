@@ -31,7 +31,7 @@ var config3 = function(room) {
     config.creeps = {};
     // console.log('c8');
     //calculates the maximum number of harvesters
-    let harvester_max = 0;
+
     // console.log('c9');
     let sources = room.find(FIND_SOURCES);
     // console.log('c10');
@@ -99,6 +99,7 @@ var config3 = function(room) {
             });
             return false;
         }
+    });
 
     // harvester_max = 10;
 
@@ -137,4 +138,4 @@ var config3 = function(room) {
     room.memory.config = config;
 }
 
-module.exports = config1;
+module.exports = config3;
