@@ -12,6 +12,34 @@ function buildRoad(config, room, pos1, pos2) {
     });
 }
 
+function placeContainersAtSources(source, room, config) {
+    let x = source.pos.x;
+    // console.log('c12');
+    let y = source.pos.y;
+    // console.log('c13');
+    let tiles = room.lookForAtArea(LOOK_TERRAIN, y - 1, x - 1,
+        y + 1, x + 1, true);
+    // console.log('c14');
+    let spaces = _.filter(tiles, (tile) => {
+        return tile.terrain !==
+            "wall" && (tile.x != source.pos.x || tile.y !=
+                source.pos.y);
+    });
+    // console.log('c15');
+    // console.log('c16');
+    let middle_space = spaces[0];
+    // console.log('c17');
+    if (middle_space) {
+        config.queue.push({
+            x: middle_space.x,
+            y: middle_space.y,
+            structureType: STRUCTURE_CONTAINER
+        });
+    }
+
+    return spaces.length;
+}
+
 //generates config for a lvl 1 room
 var config1 = function(room) {
     // console.log('c1');
@@ -20,7 +48,11 @@ var config1 = function(room) {
     //generate a construction site queue
     config.queue = []; //build queue
     // console.log('c2');
-    let spawn = Game.getObjectById(room.memory.pool[STRUCTURE_SPAWN][0]);
+    let spawn = room.find(FIND_STRUCTURES, {
+        filter: (struct) => {
+            return struct.structureType == STRUCTURE_SPAWN;
+        }
+    })[0];
     // console.log('c3');
 
     //the order objects are added to config.creeps (also config.queue) is the order those creeps are spawned in
@@ -34,30 +66,8 @@ var config1 = function(room) {
     // console.log('c10');
     _.forEach(sources, function(source) {
         // console.log('c11');
-        let x = source.pos.x;
-        // console.log('c12');
-        let y = source.pos.y;
-        // console.log('c13');
-        let tiles = room.lookForAtArea(LOOK_TERRAIN, y - 1, x - 1,
-            y + 1, x + 1, true);
-        // console.log('c14');
-        let spaces = _.filter(tiles, (tile) => {
-            return tile.terrain !==
-                "wall" && (tile.x != source.pos.x || tile.y !=
-                    source.pos.y);
-        });
-        // console.log('c15');
-        harvester_max += spaces.length;
-        // console.log('c16');
-        let middle_space = spaces[0];
-        // console.log('c17');
-        if (middle_space) {
-            config.queue.push({
-                x: middle_space.x,
-                y: middle_space.y,
-                structureType: STRUCTURE_CONTAINER
-            });
-        }
+        harvester_max += placeContainersAtSources(source, room,
+            config);
 
         buildRoad(config, room, spawn.pos, source.pos);
         // console.log('c18');
@@ -68,6 +78,7 @@ var config1 = function(room) {
     // harvester_max = 10;
 
     // console.log('c19');
+
     config.creeps.harvester = {
         body: [WORK, CARRY, MOVE, MOVE],
         max: harvester_max,
@@ -97,17 +108,26 @@ var config1 = function(room) {
             kin: 'builder'
         }
     };
+
+    config.creeps.order = [config.creeps.harvester, config.creeps.upgrader,
+        config.creeps.builder
+    ];
 
     room.memory.config = config;
 }
 
 var config2 = function(room) {
+    // console.log('c1');
     let config = {};
     // console.log('c2');
     //generate a construction site queue
     config.queue = []; //build queue
     // console.log('c2');
-    let spawn = Game.getObjectById(room.memory.pool[STRUCTURE_SPAWN][0]);
+    let spawn = room.find(FIND_STRUCTURES, {
+        filter: (struct) => {
+            return struct.structureType == STRUCTURE_SPAWN;
+        }
+    })[0];
     // console.log('c3');
 
     //the order objects are added to config.creeps (also config.queue) is the order those creeps are spawned in
@@ -121,45 +141,8 @@ var config2 = function(room) {
     // console.log('c10');
     _.forEach(sources, function(source) {
         // console.log('c11');
-        let x = source.pos.x;
-        // console.log('c12');
-        let y = source.pos.y;
-        // console.log('c13');
-        let tiles = room.lookForAtArea(LOOK_TERRAIN, y - 1, x - 1,
-            y + 1, x + 1, true);
-        // console.log('c14');
-        let spaces = _.filter(tiles, (tile) => {
-            return tile.terrain !==
-                "wall" && (tile.x != source.pos.x || tile.y !=
-                    source.pos.y);
-        });
-        // console.log('c15');
-        harvester_max += spaces.length;
-        // console.log('c16');
-        let middle_space = spaces[0];
-        // console.log('c17');
-        if (middle_space) {
-            config.queue.push({
-                x: middle_space.x,
-                y: middle_space.y,
-                structureType: STRUCTURE_CONTAINER
-            });
-        }
-
-        //add 5 extensions to the build queue
-        let max_extensions = CONTROLLER_STRUCTURES.extension[room.controller
-            .level]; //const with structure maxes by rcl
-        _.forEach(spaces, (tile) => {
-            config.queue.push({
-                x: tile.x,
-                y: tile.y,
-                structureType: STRUCTURE_EXTENSION
-            });
-            max_extensions -= 1;
-            if (max_extensions == 0) {
-                return false;
-            }
-        });
+        harvester_max += placeContainersAtSources(source, room,
+            config);
 
         buildRoad(config, room, spawn.pos, source.pos);
         // console.log('c18');
@@ -167,9 +150,10 @@ var config2 = function(room) {
 
     buildRoad(config, room, spawn.pos, room.controller.pos);
 
-    // harvester_max = 10;
+    harvester_max = 6;
 
     // console.log('c19');
+
     config.creeps.harvester = {
         body: [WORK, CARRY, MOVE, MOVE],
         max: harvester_max,
@@ -199,6 +183,10 @@ var config2 = function(room) {
             kin: 'builder'
         }
     };
+
+    config.creeps.order = [config.creeps.harvester, config.creeps.upgrader,
+        config.creeps.builder
+    ];
 
     room.memory.config = config;
 }

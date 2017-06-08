@@ -112,6 +112,7 @@ module.exports.loop = function() {
                     if (creep.memory.job != 'construct') {
                         creep.memory.job = 'construct';
                         creep.memory.action = 'withdraw';
+                        delete creep.memory.target;
                     }
                 }
 
@@ -119,6 +120,7 @@ module.exports.loop = function() {
                     if (creep.memory.job != 'upgrade') {
                         creep.memory.job = 'upgrade';
                         creep.memory.action = 'withdraw';
+                        delete creep.memory.target;
                     }
                 }
             }
@@ -127,11 +129,13 @@ module.exports.loop = function() {
                 let creep = Game.creeps[indexCreep];
 
                 if (creep.memory.kin == 'harvester' || kin_counter[
-                        'harvester'] < room.memory.config.creeps.harvester
+                        'harvester'] < room.memory.config
+                    .creeps.harvester
                     .max / 2.0) {
                     if (creep.memory.job != 'gather') {
                         creep.memory.job = 'gather';
                         creep.memory.action = 'harvest';
+                        delete creep.memory.target;
                     }
                 }
             }
