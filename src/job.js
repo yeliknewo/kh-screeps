@@ -117,7 +117,7 @@ var build = function(creep, target, target_requester) {
         console.log(
             `Creep ${creep.name} had invalid target ${creep.memory.target} for action Build.`
         );
-        creep.needTarget(target_requester, cnst.constructionSite);
+        creep.needTarget(target_requester, FIND_CONSTRUCTION_SITES);
     }
 }
 //What s
