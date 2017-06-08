@@ -3,3 +3,4 @@ package.json
 Gruntfile.js
 node_modules
 server
+default
