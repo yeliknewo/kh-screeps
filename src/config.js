@@ -138,11 +138,11 @@ var config2 = function(room) {
 
 
 
-        buildRoad(config, room, spawn.pos, source.pos);
+        // buildRoad(config, room, spawn.pos, source.pos);
         // console.log('c18');
     });
 
-    buildRoad(config, room, spawn.pos, room.controller.pos);
+    // buildRoad(config, room, spawn.pos, room.controller.pos);
 
     //add 5 extensions to the build queue
     let max_extensions = CONTROLLER_STRUCTURES.extension[room.controller
