@@ -1,7 +1,23 @@
 var util = require('util')
 var buildRoad = util.buildRoad;
 
-var config2 = function(room) {
+function generateHarvesterBody(room) {
+    let capacity = room.energyCapacityAvailable;
+    let harvester_body = [];
+    while (capacity > 0) {
+        if(capacity >= BODYPART_COST[WORK] && capacity >= 150) {
+            harvester_body.push(WORK);
+            capacity -= BODYPART_COST[WORK];
+        } else {
+            harvester_body.push(MOVE);
+            capacity = 0;
+        }
+    }
+}
+
+//generates config for a lvl 1 room
+var config3 = function(room) {
+    // console.log('c1');
     let config = {};
     // console.log('c2');
     //generate a construction site queue
@@ -19,32 +35,16 @@ var config2 = function(room) {
     // console.log('c9');
     let sources = room.find(FIND_SOURCES);
     // console.log('c10');
+    let harvester_max = sources.length;
     _.forEach(sources, function(source) {
-        // console.log('c11');
-        let x = source.pos.x;
-        // console.log('c12');
-        let y = source.pos.y;
-        // console.log('c13');
-        let tiles = room.lookForAtArea(LOOK_TERRAIN, y - 1, x - 1,
-            y + 1, x + 1, true);
-        // console.log('c14');
-        let spaces = _.filter(tiles, (tile) => {
-            return tile.terrain !==
-                "wall" && (tile.x != source.pos.x || tile.y !=
-                    source.pos.y);
-        });
-        // console.log('c15');
-        harvester_max += spaces.length;
-
 
 
         buildRoad(config, room, spawn.pos, source.pos);
-        // console.log('c18');
+
     });
 
     buildRoad(config, room, spawn.pos, room.controller.pos);
 
-    //add 5 extensions to the build queue
     let max_extensions = CONTROLLER_STRUCTURES.extension[room.controller
         .level]; //const with structure maxes by rcl
 
@@ -99,12 +99,13 @@ var config2 = function(room) {
             });
             return false;
         }
-    });
+
     // harvester_max = 10;
 
     // console.log('c19');
+
     config.creeps.harvester = {
-        body: [WORK, CARRY, MOVE, MOVE],
+        body: generateHarvesterBody,
         max: harvester_max,
         memory: {
             kin: 'harvester'
@@ -113,7 +114,7 @@ var config2 = function(room) {
     // console.log('c20');
 
     //harvest work to upgrade work is 2/1
-    let upgrader_max = Math.max(1, Math.floor(harvester_max * 0.3)); //TODO make this dynamic
+    let upgrader_max = Math.max(1, Math.floor(harvester_max * 0.3));
     config.creeps.upgrader = {
         body: [WORK, CARRY, MOVE, MOVE],
         max: upgrader_max,
@@ -136,4 +137,4 @@ var config2 = function(room) {
     room.memory.config = config;
 }
 
-module.exports = config2;
+module.exports = config1;
