@@ -125,11 +125,12 @@ module.exports.loop = function() {
                 }
             }
         } else {
+
             for (let indexCreep in Game.creeps) {
                 let creep = Game.creeps[indexCreep];
-
-                if (creep.memory.kin == 'harvester' || kin_counter[
-                        'harvester'] < room.memory.config
+                let count = kin_counter['harvester'] || 0;
+                if (creep.memory.kin == 'harvester' ||
+                    count < room.memory.config
                     .creeps.harvester
                     .max / 2.0) {
                     if (creep.memory.job != 'gather') {
