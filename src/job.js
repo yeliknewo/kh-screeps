@@ -132,7 +132,7 @@ var pickup = function(creep, target, target_requester) {
         console.log(
             `Creep ${creep.name} had invalid target ${creep.memory.target} for action Pickup.`
         );
-        creep.needTarget(target_requester, FIND_DROPPED_RESOURCES); // ?? 
+        creep.needTarget(target_requester, FIND_DROPPED_RESOURCES); // ??
     }
 }
 

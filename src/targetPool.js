@@ -69,7 +69,7 @@ var finderEnergyStorage = makeFinder(cnst.energyStorage, cnst.energyStorageInter
                 );
             }
 
-            var structureStorage = toIDs(structures);
+            var structuresStorage = toIDs(structuresStorage);
 
             for (var indexStructureStorage in structuresStorage) {
                 var structureStorage = structures[indexStructureStorage];
@@ -181,7 +181,10 @@ function toIDs(array) {
 var finders = {
     0: finderResource,
     1: finderCreep,
-    2: finderStructure
+    2: finderStructure,
+    3: finderEnergySupply.func,
+    4: finderEnergySource.func,
+    5: finderEnergyStorage.func
 };
 
 function getRandomElement(array) {
@@ -194,28 +197,34 @@ function getRandomElement(array) {
 }
 
 function updateTargetPool(room) {
-    let needsInit = room.memory.needsInit || true;
+    let needsInit = room.memory.needsInit;
+    if(needsInit === undefined) {
+        needsInit = true;
+    }
 
     if (needsInit == true) {
+        console.log(needsInit)
         room.memory.needsInit = false;
         let pool = room.memory.pool || {};
         for (var indexFinder in finders) {
+            console.log(indexFinder)
             finders[indexFinder](room, pool);
         }
         room.memory.pool = pool;
     } else {
+
         // console.log('tp1');
         let pool = room.memory.pool || {};
         // console.log('tp2');
         let statePointer = pool.statePointer || 0;
         // console.log('tp3');
-        let finderKey = poolFindStates[statePointer];
+        //let finderKey = poolFindStates[statePointer];
         // console.log('tp4');
-        let finder = finders[finderKey];
+        let finder = finders[statePointer]; // ??
         // console.log('tp5');
         finder(room, pool);
         // console.log('tp6');
-        pool.statePointer = (pool.statePointer + 1) % poolFindStates.length;
+        pool.statePointer = (pool.statePointer + 1) % Object.keys(finders).length//% poolFindStates.length;
         room.memory.pool = pool;
     }
 }
