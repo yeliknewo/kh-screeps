@@ -161,7 +161,6 @@ module.exports.loop = function() {
         // console.log('m10');
         systemSpawn(room, kin_counter);
         // console.log('m11');
-        targetPool.updateTargetPool(room);
         targetPool.distributeTargets(target_counter,
             target_requester);
     });
