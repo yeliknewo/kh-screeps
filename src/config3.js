@@ -13,6 +13,7 @@ function generateHarvesterBody(room) {
             capacity = 0;
         }
     }
+    return harvester_body;
 }
 
 //generates config for a lvl 1 room
@@ -101,12 +102,26 @@ var config3 = function(room) {
         }
     });
 
+    //REVIEW controller container placement needs to test for occupants
+    let controller = room.controller;
+    let cx = controller.pos.x;
+    let cy = controller.pos.y;
+    let tiles = room.lookAtArea(cy - 1, cx - 1, cy + 1, cx + 1, true);
+    _.forEach(tiles, (tile) => {
+        if(tile.x !== cx || tile.y !== cy) {
+            config.queue.push({x: tile.x, y: tile.y, STRUCTURE_CONTAINER});
+            console.log(`placing container at ${tile.x}, ${tile.y}.`);
+            return false;
+        }
+    });
+
+
     // harvester_max = 10;
 
     // console.log('c19');
 
     config.creeps.harvester = {
-        body: generateHarvesterBody,
+        body: generateHarvesterBody(room),
         max: harvester_max,
         memory: {
             kin: 'harvester'
