@@ -166,6 +166,14 @@ function getRandomElement(array) {
     }
 }
 
+function updateFinder(room, finderConstant) {
+    if (room.memory.needsInit == false) {
+        finders[finderConstant](room, room.memory.pool);
+    } else {
+        console.log('Updating Finder ${finderConstant} before initialization')
+    }
+}
+
 function updateTargetPool(room) {
     let needsInit = room.memory.needsInit;
     if (needsInit === undefined) {
@@ -241,6 +249,7 @@ function distributeTargets(target_counter, target_requester) {
 }
 
 module.exports = {
+    // updateFinder,
     updateTargetPool,
     distributeTargets
 };

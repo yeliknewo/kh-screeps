@@ -133,9 +133,8 @@ module.exports.loop = function() {
                 }
             }
         } else {
-
             for (let indexCreep in Game.creeps) {
-                let creep = Game.creeps[indexCreep];
+                let creep = Game.creeps[indexCreep]; //can't be null
                 let count = kin_counter['harvester'] || 0;
                 if (creep.memory.kin == 'harvester' ||
                     count < room.memory.config
