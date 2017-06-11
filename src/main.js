@@ -112,6 +112,7 @@ module.exports.loop = function() {
                     if (creep.memory.job != 'construct') {
                         creep.memory.job = 'construct';
                         creep.memory.action = 'withdraw';
+                        delete creep.memory.target;
                     }
                 }
 
@@ -119,19 +120,23 @@ module.exports.loop = function() {
                     if (creep.memory.job != 'upgrade') {
                         creep.memory.job = 'upgrade';
                         creep.memory.action = 'withdraw';
+                        delete creep.memory.target;
                     }
                 }
             }
         } else {
+
             for (let indexCreep in Game.creeps) {
                 let creep = Game.creeps[indexCreep];
-
-                if (creep.memory.kin == 'harvester' || kin_counter[
-                        'harvester'] < room.memory.config.creeps.harvester
+                let count = kin_counter['harvester'] || 0;
+                if (creep.memory.kin == 'harvester' ||
+                    count < room.memory.config
+                    .creeps.harvester
                     .max / 2.0) {
                     if (creep.memory.job != 'gather') {
                         creep.memory.job = 'gather';
                         creep.memory.action = 'harvest';
+                        delete creep.memory.target;
                     }
                 }
             }
@@ -161,7 +166,6 @@ module.exports.loop = function() {
         // console.log('m10');
         systemSpawn(room, kin_counter);
         // console.log('m11');
-        targetPool.updateTargetPool(room);
         targetPool.distributeTargets(target_counter,
             target_requester);
     });
