@@ -54,9 +54,9 @@ Creep.prototype.registerTarget = function(target_counter) {
 //gets a target based on the current action type of the creep
 //structureType is required (one of the STRUCTURE_* constants)
 //params is optional
-Creep.prototype.needTarget = function(target_requester, structureType, params) {
+Creep.prototype.needTarget = function(target_requester, poolId, params) {
     let request = {};
-    request.structureType = structureType;
+    request.poolId = poolId;
     if (params) {
         request.params = params;
     }

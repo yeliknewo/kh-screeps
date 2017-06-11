@@ -200,7 +200,7 @@ function distributeTargets(target_counter, target_requester) {
 
         let creep = Game.getObjectById(indexRequest);
         let pool = creep.room.memory.pool;
-        let targets = pool[request.structureType];
+        let targets = pool[request.poolId];
         if (request.params) {
             console.log(
                 'Target request parameters are not implemented!'); //TODO
