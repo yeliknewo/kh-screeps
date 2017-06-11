@@ -53,7 +53,15 @@ module.exports.loop = function() {
     // console.log('m1');
     cleanup();
     // console.log('m2');
-    _.forEach(Game.rooms, function(room) {
+    let rooms = [];
+
+    _.forEach(Game.spawns, function(spawn) {
+        if (rooms.indexOf(spawn.room) == -1) {
+            rooms.push(spawn.room);
+        }
+    });
+
+    _.forEach(rooms, function(room) {
         // console.log('m3');
         targetPool.updateTargetPool(room);
         if (room.leveledUp() == true || !room.memory.config || Game
