@@ -142,85 +142,6 @@ var finderCreepsOther = makeFinder(cnst.creepsOther, cnst.creepsOtherInterval,
     }
 );
 
-// var stateResources = 0;
-// var stateCreeps = 1;
-// var stateStructures = 2;
-//
-// var poolFindStates = [stateResources, stateCreeps, stateStructures];
-//
-// function filterStucturesToPool(pool, structures, structureType) {
-//     pool[structureType] = toIDs(_.filter(structures, function(struct) {
-//         return struct.structureType == structureType;
-//     }));
-// }
-//
-// function filterToPool(room, pool, find) {
-//     filterToPoolNamed(room, pool, find, find);
-// }
-//
-// function filterToPoolNamed(room, pool, find, named) {
-//     pool[named] = toIDs(room.find(find));
-// }
-//
-// var finderStructure = function(room, pool) {
-//     // console.log('tp7');
-//
-//     var structures = room.find(FIND_STRUCTURES);
-//
-//     pool['energyStorage'] = toIDs(_.filter(structures, function(struct) {
-//         return struct.structureType == STRUCTURE_SPAWN ||
-//             struct.structureType == STRUCTURE_EXTENSION ||
-//             struct.structureType == STRUCTURE_CONTAINER ||
-//             struct.structureType == STRUCTURE_TOWER || struct.structureType ==
-//             STRUCTURE_STORAGE;
-//     }));
-//
-//     let useSpawn = _.filter(structures, function(struct) {
-//         return struct.structureType == STRUCTURE_CONTAINER ||
-//             struct.structureType == STRUCTURE_STORAGE;
-//     }).length < 2;
-//
-//     pool['energySupply'] = toIDs(_.filter(structures, function(struct) {
-//         return struct.structureType == STRUCTURE_CONTAINER ||
-//             struct.structureType == STRUCTURE_STORAGE || (
-//                 useSpawn && struct.structureType ==
-//                 STRUCTURE_SPAWN);
-//     }));
-//
-//     var filters = [STRUCTURE_SPAWN, STRUCTURE_EXTENSION,
-//         STRUCTURE_CONTAINER
-//     ];
-//
-//     for (var indexFilter in filters) {
-//         filterStucturesToPool(pool, structures, filters[indexFilter]);
-//     }
-//
-//     pool[cnst.controller] = [room.controller.id];
-// };
-//
-// var finderResource = function(room, pool) {
-//     // console.log('tp8');
-//     var filters = [FIND_SOURCES, FIND_DROPPED_RESOURCES,
-//         FIND_CONSTRUCTION_SITES
-//     ];
-//     // console.log('tp10');
-//     for (var indexFilter in filters) {
-//         // console.log('tp11');
-//         filterToPool(room, pool, filters[indexFilter]);
-//         // console.log('tp12');
-//     }
-// };
-//
-// var finderCreep = function(room, pool) {
-//     // console.log('tp9');
-//
-//     var filters = [FIND_MY_CREEPS, FIND_HOSTILE_CREEPS];
-//
-//     for (var indexFilter in filters) {
-//         filterToPool(room, pool, filters[indexFilter]);
-//     }
-// };
-
 function toIDs(array) {
     var new_array = [];
     for (let i in array) {
@@ -229,15 +150,6 @@ function toIDs(array) {
     }
     return new_array;
 }
-
-// var finders = {
-//     0: finderResource,
-//     1: finderCreep,
-//     2: finderStructure,
-//     3: finderEnergySupply.func,
-//     4: finderEnergySource.func,
-//     5: finderEnergyStorage.func
-// };
 
 var finders = [
     finderEnergySource, finderEnergySupply, finderEnergyStorage,
@@ -270,16 +182,7 @@ function updateTargetPool(room) {
         }
         room.memory.pool = pool;
     } else {
-
-        // console.log('tp1');
         let pool = room.memory.pool || {};
-        // console.log('tp2');
-        // let statePointer = pool.statePointer || 0;
-        // console.log('tp3');
-        //let finderKey = poolFindStates[statePointer];
-        // console.log('tp4');
-        // let finder = finders[statePointer]; // ??
-        // console.log('tp5');
         for (var indexFinder in finders) {
             let finder = finders[indexFinder];
 
@@ -287,9 +190,6 @@ function updateTargetPool(room) {
                 finder.func(room, pool);
             }
         }
-        // finder(room, pool);
-        // console.log('tp6');
-        // pool.statePointer = (pool.statePointer + 1) % Object.keys(finders).length //% poolFindStates.length;
         room.memory.pool = pool;
     }
 }

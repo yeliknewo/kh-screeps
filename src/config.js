@@ -150,7 +150,7 @@ var config2 = function(room) {
 
     buildRoad(config, room, spawn.pos, room.controller.pos);
 
-    harvester_max = 6;
+    // harvester_max = 6;
 
     // console.log('c19');
 
