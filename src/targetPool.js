@@ -176,12 +176,7 @@ function updateFinder(room, finderConstant) {
 
 function updateTargetPool(room) {
     let needsInit = room.memory.needsInit;
-    if (needsInit === undefined) {
-        needsInit = true;
-    }
-
-    if (needsInit == true) {
-        console.log(needsInit)
+    if (needsInit === undefined || needsInit == true) {
         room.memory.needsInit = false;
         let pool = room.memory.pool || {};
         for (var indexFinder in finders) {
