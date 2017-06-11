@@ -79,6 +79,8 @@ var config1 = function(room) {
 
     // console.log('c19');
 
+    harvester_max = 6;
+
     config.creeps.harvester = {
         body: [WORK, CARRY, MOVE, MOVE],
         max: harvester_max,
@@ -231,6 +233,8 @@ var config2 = function(room) {
     });
 
     // console.log('c19');
+
+    harvester_max = 6;
 
     config.creeps.harvester = {
         body: [WORK, CARRY, MOVE, MOVE],

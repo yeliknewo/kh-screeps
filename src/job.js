@@ -47,7 +47,12 @@ var harvest = function(creep, target, target_requester) {
 }
 
 var transfer = function(creep, target, target_requester) {
+    if (!target) {
+        creep.needTarget(target_requester, cnst.energyStorage);
+        return;
+    }
     let result = creep.transfer(target, RESOURCE_ENERGY);
+
     if (creep.carry.energy == 0) {
         creep.nextAction();
         creep.needTarget(target_requester, cnst.energySource);
@@ -56,7 +61,7 @@ var transfer = function(creep, target, target_requester) {
     } else if (creep.memory.stationary >
         2) {
         creep.memory.job = 'construct';
-        creep.nextAction();
+        creep.memory.action = 'build';
         creep.needTarget(target_requester, cnst.constructionSite);
     } else if (result == ERR_INVALID_TARGET) {
         console.log(
@@ -67,6 +72,11 @@ var transfer = function(creep, target, target_requester) {
 }
 
 var withdraw = function(creep, target, target_requester) {
+    if (!target) {
+        creep.needTarget(target_requester, cnst.energySupply);
+        return;
+    }
+
     let result = creep.withdraw(target, RESOURCE_ENERGY);
 
     if (creep.carry.energy == creep.carryCapacity) {
@@ -76,7 +86,13 @@ var withdraw = function(creep, target, target_requester) {
         } else if (nextAction == 'build') {
             creep.needTarget(target_requester, cnst.constructionSite);
         }
-    } else if (result == ERR_NOT_IN_RANGE) {
+    } else if ((target.energy && target.energy <= 10) || (target.storage &&
+            target.storage[RESOURCE_ENERGY] <= 10)) {
+        creep.memory.job = 'gather';
+        creep.nextAction();
+        creep.needTarget(target_requester, cnst.energySource);
+    } else if (result ==
+        ERR_NOT_IN_RANGE) {
         creep.moveTo(target);
     } else if (creep.carry.energy < creep.carryCapacity && creep.memory.stationary >
         5) {
