@@ -143,22 +143,8 @@ var config2 = function(room) {
     // console.log('c10');
     _.forEach(sources, function(source) {
         // console.log('c11');
-        let x = source.pos.x;
-        // console.log('c12');
-        let y = source.pos.y;
-        // console.log('c13');
-        let tiles = room.lookForAtArea(LOOK_TERRAIN, y - 1, x - 1,
-            y + 1, x + 1, true);
-        // console.log('c14');
-        let spaces = _.filter(tiles, (tile) => {
-            return tile.terrain !==
-                "wall" && (tile.x != source.pos.x || tile.y !=
-                    source.pos.y);
-        });
-        // console.log('c15');
-        harvester_max += spaces.length;
-
-
+        harvester_max += placeContainersAtSources(source, room,
+            config);
 
         buildRoad(config, room, spawn.pos, source.pos);
         // console.log('c18');
