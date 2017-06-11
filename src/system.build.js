@@ -6,6 +6,7 @@ function systemBuild(room) {
         let active_sites = room.memory.pool[cnst.constructionSite].length; //REVIEW
         let max_builders = room.memory.config.creeps.builder.max || 3;
         if (active_sites < max_builders) {
+            cnst.requestFinder(room, cnst.constructionSite);
             while (active_sites < max_builders) {
                 let new_site = queue.shift();
                 if (new_site) {

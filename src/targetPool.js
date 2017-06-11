@@ -166,34 +166,31 @@ function getRandomElement(array) {
     }
 }
 
-function updateFinder(room, finderConstant) {
-    if (room.memory.needsInit == false) {
-        finders[finderConstant](room, room.memory.pool);
-    } else {
-        console.log('Updating Finder ${finderConstant} before initialization')
-    }
-}
-
 function updateTargetPool(room) {
     let needsInit = room.memory.needsInit;
     if (needsInit === undefined || needsInit == true) {
         room.memory.needsInit = false;
-        let pool = room.memory.pool || {};
+        let pool = room.memory.pool = {};
         for (var indexFinder in finders) {
-            console.log(indexFinder)
-            finders[indexFinder](room, pool);
+            // console.log(indexFinder)
+            finders[indexFinder].func(room, pool);
         }
-        room.memory.pool = pool;
+        room.memory.finderRequests = {};
+        // console.log(room.memory.finderRequests);
     } else {
-        let pool = room.memory.pool || {};
+        let pool = room.memory.pool;
         for (var indexFinder in finders) {
             let finder = finders[indexFinder];
 
-            if ((Game.time + finder.offset) % finder.interval == 0) {
+
+            if ((room.memory.pool.finderRequests && room.memory.pool.finderRequests[
+                    indexFinder] == true) || (Game.time +
+                    finder.offset) % finder.interval == 0) {
+                room.memory.finderRequests[indexFinder] = false;
                 finder.func(room, pool);
             }
         }
-        room.memory.pool = pool;
+
     }
 }
 
@@ -244,7 +241,6 @@ function distributeTargets(target_counter, target_requester) {
 }
 
 module.exports = {
-    // updateFinder,
     updateTargetPool,
     distributeTargets
 };

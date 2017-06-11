@@ -63,7 +63,7 @@ module.exports.loop = function() {
 
     _.forEach(rooms, function(room) {
         // console.log('m3');
-        targetPool.updateTargetPool(room);
+        // targetPool.updateTargetPool(room);
         if (room.leveledUp() == true || !room.memory.config || Game
             .time % 50 == 0) {
             // console.log('m5');
@@ -111,6 +111,7 @@ module.exports.loop = function() {
                 kin_counter[creep.memory.kin] = 1;
             }
         }
+        targetPool.updateTargetPool(room);
 
         if (room.energyAvailable == room.energyCapacityAvailable) {
             for (let indexCreep in Game.creeps) {

@@ -43,6 +43,7 @@ var harvest = function(creep, target, target_requester) {
             `Creep ${creep.name} had invalid target ${creep.memory.target} for action Harvest.`
         );
         creep.needTarget(target_requester, cnst.energySource);
+        cnst.requestFinder(creep.room, cnst.energySource);
     }
 }
 
@@ -68,6 +69,7 @@ var transfer = function(creep, target, target_requester) {
             `Creep ${creep.name} had invalid target ${creep.memory.target} for action Transfer.`
         );
         creep.needTarget(target_requester, cnst.energyStorage);
+        cnst.requestFinder(creep.room, cnst.energyStorage);
     }
 }
 
@@ -103,6 +105,7 @@ var withdraw = function(creep, target, target_requester) {
             `Creep ${creep.name} had invalid target ${creep.memory.target} for action Withdraw.`
         );
         creep.needTarget(target_requester, cnst.energySupply);
+        cnst.requestFinder(creep.room, cnst.energySupply);
     }
 }
 
@@ -122,20 +125,24 @@ var upgradeController = function(creep, target, target_requester) {
 }
 
 var build = function(creep, target, target_requester) {
-        let result = creep.build(target);
-        if (creep.carry.energy == 0) {
-            creep.nextAction();
-            creep.needTarget(target_requester, cnst.energySupply);
-        } else if (result == ERR_NOT_IN_RANGE) {
-            creep.moveTo(target);
-        } else if (result == ERR_INVALID_TARGET) {
-            console.log(
-                `Creep ${creep.name} had invalid target ${creep.memory.target} for action Build.`
-            );
-            creep.needTarget(target_requester, cnst.constructionSite);
-        }
+    let result = creep.build(target);
+    if (creep.carry.energy == 0) {
+        creep.nextAction();
+        creep.needTarget(target_requester, cnst.energySupply);
+    } else if (result == ERR_NOT_IN_RANGE) {
+        creep.moveTo(target);
+    } else if (result == ERR_INVALID_TARGET) {
+        console.log(
+            `Creep ${creep.name} had invalid target ${creep.memory.target} for action Build.`
+        );
+        creep.needTarget(target_requester, cnst.constructionSite);
+        cnst.requestFinder(creep.room, cnst.constructionSite);
+        cnst.requestFinder(creep.room, cnst.energySupply);
+        cnst.requestFinder(creep.room, cnst.energyStorage);
     }
-    //What s
+}
+
+//What s
 var pickup = function(creep, target, target_requester) {
     let result = creep.pickup(target);
     if (creep.carry.energy == creep.carryCapacity) {

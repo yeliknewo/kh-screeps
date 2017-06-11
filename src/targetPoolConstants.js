@@ -31,6 +31,10 @@ var constructionSiteOffset = 0;
 var creepsPlayerOffset = 1;
 var creepsOtherOffset = 2;
 
+function requestFinder(room, finderConstant) {
+    room.memory.finderRequests[finderConstant] = true;
+}
+
 module.exports = {
     energySource, energySupply, energyStorage,
     energyPrep,
@@ -41,5 +45,5 @@ module.exports = {
     creepsPlayerInterval, creepsOtherInterval, energySourceOffset,
     energySupplyOffset, energyStorageOffset, energyPrepOffset,
     energyDrainOffset, resourcesDroppedOffset, constructionSiteOffset,
-    creepsPlayerOffset, creepsOtherOffset
+    creepsPlayerOffset, creepsOtherOffset, requestFinder
 };

@@ -33,8 +33,8 @@ Creep.prototype.nextAction = function() {
     if (job) {
         let actions = job_to_actions[job];
         let current_index = actions.indexOf(current);
-        let next_action = job_to_actions[job][current_index + 1] ||
-            job_to_actions[job][0];
+        let next_index = (current_index + 1) % job_to_actions[job].length;
+        let next_action = job_to_actions[job][next_index];
         //console.log(`Got next job->action ${next_action} for ${this.name}`);
         this.memory.action = next_action;
         return next_action;
