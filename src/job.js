@@ -29,7 +29,13 @@ var mine = function(creep, target, target_requester) {
 }
 
 var harvest = function(creep, target, target_requester) {
+    if (!target) {
+        creep.needTarget(target_requester, cnst.energySource);
+        return;
+    }
+
     let result = creep.harvest(target);
+
     if (creep.carry.energy == creep.carryCapacity) {
         creep.nextAction();
         creep.needTarget(target_requester, cnst.energyStorage);
@@ -52,6 +58,7 @@ var transfer = function(creep, target, target_requester) {
         creep.needTarget(target_requester, cnst.energyStorage);
         return;
     }
+
     let result = creep.transfer(target, RESOURCE_ENERGY);
 
     if (creep.carry.energy == 0) {
@@ -110,7 +117,13 @@ var withdraw = function(creep, target, target_requester) {
 }
 
 var upgradeController = function(creep, target, target_requester) {
+    if (!target) {
+        creep.needTarget(target_requester, cnst.controller);
+        return;
+    }
+
     let result = creep.upgradeController(target);
+
     if (result == ERR_NOT_ENOUGH_RESOURCES) {
         creep.nextAction();
         creep.needTarget(target_requester, cnst.energySupply);
@@ -125,7 +138,16 @@ var upgradeController = function(creep, target, target_requester) {
 }
 
 var build = function(creep, target, target_requester) {
+    if (!target) {
+        creep.needTarget(target_requester, cnst.constructionSite);
+        cnst.requestFinder(creep.room, cnst.constructionSite);
+        cnst.requestFinder(creep.room, cnst.energySupply);
+        cnst.requestFinder(creep.room, cnst.energyStorage);
+        return;
+    }
+
     let result = creep.build(target);
+
     if (creep.carry.energy == 0) {
         creep.nextAction();
         creep.needTarget(target_requester, cnst.energySupply);

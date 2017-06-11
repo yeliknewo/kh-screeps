@@ -113,6 +113,33 @@ module.exports.loop = function() {
         }
         targetPool.updateTargetPool(room);
 
+        // if (job_counter['gather'] > room.memory.config.creeps.harvester
+        //     .max) {
+        //     for (let indexCreep in Game.creeps) {
+        //         let creep = Game.creeps[indexCreep];
+        //
+        //         if (creep.memory.kin == 'builder') {
+        //             creep.memory.job = 'construct';
+        //         }
+        //     }
+        // }
+
+        // if (job_counter['total'] < 4) {
+        //     _.forEach(Game.creeps, function(creep) {
+        //         if (creep.memory.job != 'gather') {
+        //             creep.memory.job = 'gather';
+        //             creep.memory.action = 'harvest';
+        //         }
+        //     });
+        // }
+        // console.log('m9');
+        systemBuild(room);
+        // console.log('m10');
+        systemSpawn(room, kin_counter);
+        // console.log('m11');
+        targetPool.distributeTargets(target_counter,
+            target_requester);
+
         if (room.energyAvailable == room.energyCapacityAvailable) {
             for (let indexCreep in Game.creeps) {
                 let creep = Game.creeps[indexCreep];
@@ -149,33 +176,6 @@ module.exports.loop = function() {
                 }
             }
         }
-
-        // if (job_counter['gather'] > room.memory.config.creeps.harvester
-        //     .max) {
-        //     for (let indexCreep in Game.creeps) {
-        //         let creep = Game.creeps[indexCreep];
-        //
-        //         if (creep.memory.kin == 'builder') {
-        //             creep.memory.job = 'construct';
-        //         }
-        //     }
-        // }
-
-        // if (job_counter['total'] < 4) {
-        //     _.forEach(Game.creeps, function(creep) {
-        //         if (creep.memory.job != 'gather') {
-        //             creep.memory.job = 'gather';
-        //             creep.memory.action = 'harvest';
-        //         }
-        //     });
-        // }
-        // console.log('m9');
-        systemBuild(room);
-        // console.log('m10');
-        systemSpawn(room, kin_counter);
-        // console.log('m11');
-        targetPool.distributeTargets(target_counter,
-            target_requester);
     });
     // console.log('m12');
 }
