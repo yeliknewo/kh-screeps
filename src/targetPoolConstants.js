@@ -9,7 +9,7 @@ var constructionSite = 6;
 var creepsPlayer = 7;
 var creepsOther = 8;
 
-var energySourceInterval = 150;
+var energySourceInterval = 10;
 var energySupplyInterval = 10;
 var energyStorageInterval = 10;
 var energyPrepInterval = 10;
