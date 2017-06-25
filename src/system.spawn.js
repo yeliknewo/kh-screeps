@@ -8,7 +8,7 @@ Spawn.prototype.run = function(kin_counter) {
     // console.log('ss2');
     if (!this.spawning) {
         // console.log('ss3');
-        _.forEach(creeps.order, function(template) {
+        _.forEach(creeps, function(template) {
             // console.log('ss4');
             let kin = template.memory.kin;
             // console.log('ss5');
