@@ -24,7 +24,11 @@ var config3 = function(room) {
     //generate a construction site queue
     config.queue = []; //build queue
     // console.log('c2');
-    let spawn = Game.getObjectById(room.memory.pool[STRUCTURE_SPAWN][0]);
+    let spawn = room.find(FIND_STRUCTURES, {
+        filter: (struct) => {
+            return (struct.structureType == STRUCTURE_SPAWN)
+        }
+    })[0];
     // console.log('c3');
 
     //the order objects are added to config.creeps (also config.queue) is the order those creeps are spawned in
