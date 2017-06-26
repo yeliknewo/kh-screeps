@@ -5,7 +5,7 @@ function generateHarvesterBody(room) {
     let capacity = room.energyCapacityAvailable;
     let harvester_body = [];
     while (capacity > 0) {
-        if(capacity >= BODYPART_COST[WORK] && capacity >= 150) {
+        if (capacity >= BODYPART_COST[WORK] && capacity >= 150) {
             harvester_body.push(WORK);
             capacity -= BODYPART_COST[WORK];
         } else {
@@ -14,6 +14,21 @@ function generateHarvesterBody(room) {
         }
     }
     return harvester_body;
+}
+
+function generateHaulerBody(room) {
+    let capacity = room.energyCapacityAvailable;
+    let hauler_body = [];
+    while (capacity > 0) {
+        if (capacity >= BODYPART_COST[CARRY] && capacity % 2 == 0) {
+            hauler_body.push(CARRY);
+            capacity -= BODYPART_COST[CARRY];
+        } else if (capacity >= BODYPART_COST[MOVE]) {
+            hauler_body.push(MOVE);
+            capacity -= BODYPART_COST[MOVE];
+        }
+    }
+    return hauler_body;
 }
 
 //generates config for a lvl 1 room
@@ -32,22 +47,13 @@ var config3 = function(room) {
     // console.log('c3');
 
     //the order objects are added to config.creeps (also config.queue) is the order those creeps are spawned in
-    // console.log('c7');
     config.creeps = {};
-    // console.log('c8');
-    //calculates the maximum number of harvesters
 
-    // console.log('c9');
     let sources = room.find(FIND_SOURCES);
-    // console.log('c10');
     let harvester_max = sources.length;
     _.forEach(sources, function(source) {
-
-
         buildRoad(config, room, spawn.pos, source.pos);
-
     });
-
     buildRoad(config, room, spawn.pos, room.controller.pos);
 
     let max_extensions = CONTROLLER_STRUCTURES.extension[room.controller
@@ -131,6 +137,13 @@ var config3 = function(room) {
             kin: 'harvester'
         }
     };
+    config.creeps.hauler = {
+        body: generateHaulerBody(room),
+        max: harvester_max, // REVIEW
+        memory: {
+            kin: 'collector'
+        }
+    }
     // console.log('c20');
 
     //harvest work to upgrade work is 2/1
