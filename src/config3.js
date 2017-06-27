@@ -50,61 +50,19 @@ var config3 = function(room) {
 
     buildRoad(config, room, spawn.pos, room.controller.pos);
 
+    // max is a number, current is an array of extension objects
     let max_extensions = CONTROLLER_STRUCTURES.extension[room.controller
         .level]; //const with structure maxes by rcl
-
-    let x = spawn.pos.x;
-    let y = spawn.pos.y;
-    const d = 3; //distance from spawn to place the 3x3 block of extensions
-    let midpoints = [
-        {x: x + d, y: y},
-        {x: x - d,  y: y},
-        {x: x, y: y + d},
-        {x: x, y: y - d}
-    ];
-    _.forEach(midpoints, function(point) {
-        let x = point.x;
-        let y = point.y;
-        let tiles = room.lookAtArea(y - 1, x - 1, y + 1, x + 1, true);
-        let occupants = tiles.map((obj) => {
-            return obj.type === 'structure' ||
-            (obj.type === 'terrain' && obj.terrain === 'wall')
-        });
-        //right and down is increasing in the screeps coordinate system
-        //if no occupants, proceed
-        //the layout looks like the side with 5 dots in a dice
-        //O   O
-        //  O
-        //O   O
-        if(!occupants.length) {
-            config.queue.push({
-                x: x - 1,
-                y: y - 1,
-                structureType: STRUCTURE_EXTENSION
-            });
-            config.queue.push({
-                x: x + 1,
-                y: y - 1,
-                structureType: STRUCTURE_EXTENSION
-            });
-            config.queue.push({
-                x: x ,
-                y: y,
-                structureType: STRUCTURE_EXTENSION
-            });
-            config.queue.push({
-                x: x - 1,
-                y: y + 1,
-                structureType: STRUCTURE_EXTENSION
-            });
-            config.queue.push({
-                x: x + 1,
-                y: y + 1,
-                structureType: STRUCTURE_EXTENSION
-            });
-            return false;
+    let current_extensions = room.find(FIND_STRUCTURES, {
+        filter: (s) => {
+            return (s.structureType == STRUCTURE_EXTENSION)
         }
     });
+    console.log(`max extensions ${max_extensions}, current ${current_extensions.length}`)
+    let x = spawn.pos.x;
+    let y = spawn.pos.y;
+    let spawn_tiles = room.lookAtArea(y - 1, x - 1, y + 1, x + 1);
+
 
     //REVIEW controller container placement needs to test for occupants
     let controller = room.controller;
