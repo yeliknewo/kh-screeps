@@ -30,8 +30,6 @@ var finderEnergySupply = makeFinder(cnst.energySupply, cnst.energySupplyInterval
                 .y - 1, source.pos.x - 1, source.pos.y + 1, source.pos.x +
                 1, true);
 
-            room.memory.kappa = structures;
-
             for (var indexStructures in structures) {
                 // console.log("tp2");
                 var structure = structures[indexStructures];
@@ -199,43 +197,47 @@ function distributeTargets(target_counter, target_requester) {
         let request = target_requester[indexRequest];
 
         let creep = Game.getObjectById(indexRequest);
-        let pool = creep.room.memory.pool;
-        let targets = pool[request.poolId];
-        if (request.params) {
-            console.log(
-                'Target request parameters are not implemented!'); //TODO
-        }
-        var least_used = [];
-        var usage = 1000;
-        _.forEach(targets, function(id) {
-            let count = target_counter[id] || 0;
-            if (count < usage) {
-                usage = count;
-                least_used = [id];
-            } else if (count == usage) {
-                least_used.push(id);
+        let room = creep.room;
+        let pool = room.memory.pool;
+        if (pool) {
+            let targets = pool[request.poolId];
+            if (request.params) {
+                console.log(
+                    'Target request parameters are not implemented!'); //TODO
             }
-        });
-        //console.log(`Got target ${least_used} for creep ${creep.name}.`);
-        // console.log('Usage: ', least_used, usage);
-
-        var bestId = undefined;
-        var bestDistance = 10000;
-        _.forEach(least_used, function(id) {
-            var target = Game.getObjectById(id);
-            if (target) {
-                var distance = target.pos.getRangeTo(creep.pos);
-                if (distance < bestDistance) {
-                    bestId = id;
-                    bestDistance = distance;
+            var least_used = [];
+            var usage = 1000;
+            _.forEach(targets, function(id) {
+                let count = target_counter[id] || 0;
+                if (count < usage) {
+                    usage = count;
+                    least_used = [id];
+                } else if (count == usage) {
+                    least_used.push(id);
                 }
+            });
+
+            // console.log(`Got target ${least_used} for creep ${creep.name}.`);
+            // console.log('Usage: ', least_used, usage);
+
+            var bestId = undefined;
+            var bestDistance = 10000;
+            _.forEach(least_used, function(id) {
+                var target = Game.getObjectById(id);
+                if (target) {
+                    var distance = target.pos.getRangeTo(creep.pos);
+                    if (distance < bestDistance) {
+                        bestId = id;
+                        bestDistance = distance;
+                    }
+                }
+            });
+            let prev_target = creep.memory.target;
+            if (bestId == prev_target) { //then get a random one instead!
+                creep.memory.target = getRandomElement(targets); //REVIEW
+            } else {
+                creep.memory.target = bestId;
             }
-        });
-        let prev_target = creep.memory.target;
-        if (bestId == prev_target) { //then get a random one instead!
-            creep.memory.target = getRandomElement(targets); //REVIEW
-        } else {
-            creep.memory.target = bestId;
         }
     }
 }
