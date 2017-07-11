@@ -11,6 +11,15 @@ var wait = function(creep, target, target_requester) {
     let result = creep.moveTo(target);
 }
 
+var goto = function(creep, target, target_requester) {
+    let result = creep.moveTo(target);
+    if (result == ERR_INVALID_TARGET) {
+        creep.needTarget(target_requester, cnst.spawnsPlayer)
+    } else if (creep.pos.isNearTo(target.pos)) {
+        creep.say(`GOTO DONE!`);
+    }
+}
+
 //REVIEW
 //for harvesters without carry parts
 var mine = function(creep, target, target_requester) {
@@ -55,6 +64,7 @@ var harvest = function(creep, target, target_requester) {
 
 var transfer = function(creep, target, target_requester) {
     if (!target) {
+
         creep.needTarget(target_requester, cnst.energyStorage);
         return;
     }

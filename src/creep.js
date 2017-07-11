@@ -55,6 +55,7 @@ Creep.prototype.registerTarget = function(target_counter) {
 //structureType is required (one of the STRUCTURE_* constants)
 //params is optional
 Creep.prototype.needTarget = function(target_requester, poolId, params) {
+    console.log(`Creep ${this.name} needs target.`)
     let request = {};
     request.poolId = poolId;
     if (params) {
