@@ -1,5 +1,6 @@
-var util = require('util')
+var util = require('util');
 var buildRoad = util.buildRoad;
+//var scan = util.scan;
 
 var config2 = function(room) {
     let config = {};
@@ -52,61 +53,10 @@ var config2 = function(room) {
     let max_extensions = CONTROLLER_STRUCTURES.extension[room.controller
         .level]; //const with structure maxes by rcl
 
-    let x = spawn.pos.x;
-    let y = spawn.pos.y;
-    const d = 3; //distance from spawn to place the 3x3 block of extensions
-    let midpoints = [
-        {x: x + d, y: y},
-        {x: x - d,  y: y},
-        {x: x, y: y + d},
-        {x: x, y: y - d}
-    ];
-    _.forEach(midpoints, function(point) {
-        let x = point.x;
-        let y = point.y;
-        let tiles = room.lookAtArea(y - 1, x - 1, y + 1, x + 1, true);
-        let occupants = tiles.map((obj) => {
-            return obj.type === 'structure' ||
-            (obj.type === 'terrain' && obj.terrain === 'wall')
-        });
-        //right and down is increasing in the screeps coordinate system
-        //if no occupants, proceed
-        //the layout looks like the side with 5 dots in a dice
-        //O   O
-        //  O
-        //O   O
-        if(!occupants.length) {
-            config.queue.push({
-                x: x - 1,
-                y: y - 1,
-                structureType: STRUCTURE_EXTENSION
-            });
-            config.queue.push({
-                x: x + 1,
-                y: y - 1,
-                structureType: STRUCTURE_EXTENSION
-            });
-            config.queue.push({
-                x: x ,
-                y: y,
-                structureType: STRUCTURE_EXTENSION
-            });
-            config.queue.push({
-                x: x - 1,
-                y: y + 1,
-                structureType: STRUCTURE_EXTENSION
-            });
-            config.queue.push({
-                x: x + 1,
-                y: y + 1,
-                structureType: STRUCTURE_EXTENSION
-            });
-            return false;
-        }
-    });
-    // harvester_max = 10;
+    let pos = spawn.pos;
+    util.scan(pos, 2);
 
-    // console.log('c19');
+
     config.creeps.harvester = {
         body: [WORK, CARRY, MOVE, MOVE],
         max: harvester_max,

@@ -14,6 +14,18 @@ function buildRoad(config, room, pos1, pos2) {
     });
 }
 
-module.exports = {
-    buildRoad
+// scans an area
+var scan = function(pos, radius) {
+    let room = Game.rooms[pos.roomName];
+    let x = pos.x;
+    let y = pos.y;
+    let tiles = room.lookAtArea(y - 1, x - 1, y + 1, x + 1);
+    Object.keys(tiles).forEach( (key) => {
+        
+    });
 }
+
+module.exports = {
+    buildRoad,
+    scan
+};

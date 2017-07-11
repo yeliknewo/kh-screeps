@@ -62,7 +62,7 @@ module.exports.loop = function() {
     });
 
     _.forEach(rooms, function(room) {
-        // console.log('m3');
+         console.log('pool', room.memory.pool);
         // targetPool.updateTargetPool(room);
         if (room.leveledUp() == true || !room.memory.config || Game
             .time % 50 == 0) {
