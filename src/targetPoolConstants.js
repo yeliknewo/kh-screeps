@@ -9,6 +9,10 @@ var constructionSite = 6;
 var creepsPlayer = 7;
 var creepsOther = 8;
 
+var containersPlayer = 9;
+var spawnsPlayer = 10;
+var extensionsPlayer = 11;
+
 var energySourceInterval = 10;
 var energySupplyInterval = 10;
 var energyStorageInterval = 10;
