@@ -73,6 +73,28 @@ var finderEnergyStorage = makeFinder(cnst.energyStorage, cnst.energyStorageInter
                     }
                 }
             );
+            // store structure ids in pool, by their types
+            var containers = [];
+            var spawns = [];
+            var extensions = [];
+            _.forEach(structures, (s) => {
+                switch (s.structureType) {
+                    case STRUCTURE_CONTAINER:
+                        containers.push(s.id);
+                        break;
+
+                    case STRUCTURE_SPAWN:
+                        spawns.push(s.id);
+                        break;
+
+                    case STRUCTURE_EXTENSION:
+                        extensions.push(s.id);
+                        break;
+                }
+            });
+            pool.containers = containers;
+            pool.spawns = spawns;
+            pool.extensions = extensions;
 
             var structuresStorage = toIDs(structures);
 
