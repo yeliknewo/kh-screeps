@@ -14,13 +14,13 @@ var wait = function(creep, target, target_requester) {
 var goto = function(creep, target, target_requester) {
     let result = creep.moveTo(target);
     if (result == ERR_INVALID_TARGET) {
-        creep.needTarget(target_requester, cnst.spawnsPlayer)
+        // creep.needTarget(target_requester, cnst.spawnsPlayer)
+        console.log(`WARNING invalid target in goto job TODO`); // TODO
     } else if (creep.pos.isNearTo(target.pos)) {
         creep.say(`GOTO DONE!`);
     }
 }
 
-//REVIEW
 //for harvesters without carry parts
 var mine = function(creep, target, target_requester) {
     let result = creep.harvest(target);
