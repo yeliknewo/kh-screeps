@@ -1,4 +1,4 @@
-var util = require('util')
+var util = require('util');
 var buildRoad = util.buildRoad;
 var cnst = require('targetPoolConstants');
 

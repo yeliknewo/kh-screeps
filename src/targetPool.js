@@ -23,19 +23,14 @@ var finderEnergySupply = makeFinder(cnst.energySupply, cnst.energySupplyInterval
 
         var sources = room.find(FIND_SOURCES);
         for (var indexSource in sources) {
-            // console.log("tp1");
             var source = sources[indexSource];
-
             var structures = room.lookForAtArea(LOOK_STRUCTURES, source.pos
                 .y - 1, source.pos.x - 1, source.pos.y + 1, source.pos.x +
                 1, true);
 
             for (var indexStructures in structures) {
-                // console.log("tp2");
                 var structure = structures[indexStructures];
-
                 if (structure.structureType == STRUCTURE_CONTAINER) {
-                    // console.log("tp3");
                     energySupply.push(structure.id);
                 }
             }
@@ -170,11 +165,9 @@ function updateTargetPool(room) {
         room.memory.needsInit = false;
         let pool = room.memory.pool = {};
         for (var indexFinder in finders) {
-            // console.log(indexFinder)
             finders[indexFinder].func(room, pool);
         }
         room.memory.finderRequests = {};
-        // console.log(room.memory.finderRequests);
     } else {
         let pool = room.memory.pool;
         for (var indexFinder in finders) {
@@ -216,9 +209,6 @@ function distributeTargets(target_counter, target_requester) {
                     least_used.push(id);
                 }
             });
-
-            // console.log(`Got target ${least_used} for creep ${creep.name}.`);
-            // console.log('Usage: ', least_used, usage);
 
             var bestId = undefined;
             var bestDistance = 10000;

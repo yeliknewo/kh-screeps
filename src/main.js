@@ -33,13 +33,12 @@ Structure.prototype.built = function() {
 
 //event: returns true when the event triggers, otherwise false
 Room.prototype.leveledUp = function() {
-    // return true;
-    // console.log(`Room ${this.name} leveled up to ${this.controller.level}!`);
     let p_lvl = this.memory.p_lvl || -1;
     let lvl = this.controller.level;
     if (lvl) {
         if (lvl > p_lvl) {
             this.memory.p_lvl = lvl;
+            console.log(`Room ${this.name} leveled up to ${this.controller.level}!`);
             return true;
         } else {
             return false;
@@ -50,9 +49,7 @@ Room.prototype.leveledUp = function() {
 }
 
 module.exports.loop = function() {
-    // console.log('m1');
     cleanup();
-    // console.log('m2');
     let rooms = [];
 
     _.forEach(Game.spawns, function(spawn) {
@@ -62,18 +59,12 @@ module.exports.loop = function() {
     });
 
     _.forEach(rooms, function(room) {
-         console.log('pool', room.memory.pool);
-        // targetPool.updateTargetPool(room);
         if (room.leveledUp() == true || !room.memory.config || Game
             .time % 50 == 0) {
-            // console.log('m5');
             let generator = level_to_config_generator[room.controller
                 .level];
-            // console.log('m6');
             generator(room);
-            // console.log('m7');
         }
-        // console.log('m8');
         var action_counter = {};
         var job_counter = {};
         var kin_counter = {};
@@ -132,11 +123,8 @@ module.exports.loop = function() {
         //         }
         //     });
         // }
-        // console.log('m9');
         systemBuild(room);
-        // console.log('m10');
         systemSpawn(room, kin_counter);
-        // console.log('m11');
         targetPool.distributeTargets(target_counter,
             target_requester);
 
@@ -177,5 +165,4 @@ module.exports.loop = function() {
             }
         }
     });
-    // console.log('m12');
 }
